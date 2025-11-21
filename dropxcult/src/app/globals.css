@@ -1,0 +1,253 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+html,
+body,
+:root {
+  height: 100vh;
+}
+
+/* 🌗 Section blend + hero adaptive tones */
+:root {
+  --section-blend: #f5f5f5;
+  --hero-bg: rgba(255, 255, 255, 0.8);
+  --hero-blend: rgba(255, 255, 255, 1);
+}
+
+.dark {
+  --section-blend: #111;
+  --hero-bg: rgba(17, 17, 17, 0.8);
+  --hero-blend: rgba(17, 17, 17, 1);
+}
+
+/* Tailwind theme extension */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ================== Color Tokens ================== */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+/* ================== Base Layer ================== */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ================== Animations ================== */
+@layer utilities {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.25s ease-out;
+  }
+}
+
+/* ================== Utility Styles ================== */
+
+/* Prevent images from breaking columns */
+.break-inside-avoid {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+.scrollbar-thumb-red-600::-webkit-scrollbar-thumb {
+  background-color: #dc2626;
+  border-radius: 8px;
+}
+.scrollbar-thumb-red-600::-webkit-scrollbar-thumb:hover {
+  background-color: #b91c1c;
+}
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ✨ Frosted Blend for section transitions */
+.frosted-blend::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--background), white 15%) 0%,
+    color-mix(in oklch, var(--background), white 25%) 30%,
+    var(--background) 100%
+  );
+  backdrop-filter: blur(20px) saturate(120%);
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.4s ease, opacity 0.4s ease;
+}
+
+/* Light mode blend */
+@media (prefers-color-scheme: light) {
+  .frosted-blend::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.95) 40%,
+      var(--background) 100%
+    );
+  }
+}
+
+/* Dark mode blend */
+.dark .frosted-blend::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 17, 17, 0.7) 0%,
+    rgba(17, 17, 17, 0.9) 40%,
+    var(--background) 100%
+  );
+}
+
+/* ================================================ */
+/* 🔴 Shared Hero → Inspiration Gradient Continuity */
+/* ================================================ */
+
+/* === HERO SECTION LIGHT MODE (room-like blend) === */
+.hero-gradient-bg {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    oklch(0.985 0.01 25) 0%,       /* soft warm white (top-left light) */
+    oklch(0.965 0.005 230) 40%,    /* neutral daylight gray (middle tone) */
+    oklch(0.93 0.015 25) 100%      /* slightly warm gray shadow (bottom-right) */
+  );
+  overflow: hidden;
+  transition: background 0.6s ease;
+}
+
+/* === INSPIRATION SECTION MIRROR (flipped vertically) === */
+.inspiration-gradient-bg {
+  position: relative;
+  background: linear-gradient(
+    315deg,
+    oklch(0.985 0.01 25) 0%, 
+    oklch(0.965 0.005 230) 40%, 
+    oklch(0.93 0.015 25) 100%
+  );
+  overflow: hidden;
+  transition: background 0.6s ease;
+}
+
+/* 🌑 DARK MODE (cinematic tone depth) */
+.dark .hero-gradient-bg {
+  background: linear-gradient(
+    to bottom,
+    oklch(0.15 0 0) 0%,
+    oklch(0.12 0 0) 25%,
+    oklch(0.1 0 0) 60%,
+    oklch(0.08 0 0) 100%
+  );
+}
+
+.dark .inspiration-gradient-bg {
+  background: linear-gradient(
+    to top,
+    oklch(0.15 0 0) 0%, 
+    oklch(0.12 0 0) 25%, 
+    oklch(0.1 0 0) 60%, 
+    oklch(0.08 0 0) 100%
+  );
+}
+
+/* Optional soft fade overlay for seamless section join */
+.gradient-bridge {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--background), transparent 60%) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
